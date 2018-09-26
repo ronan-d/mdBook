@@ -1,6 +1,7 @@
 #![allow(missing_docs)] // FIXME: Document this
 
 pub mod fs;
+mod math_block;
 mod string;
 use errors::Error;
 use regex::Regex;
@@ -114,6 +115,7 @@ pub fn render_markdown(text: &str, curly_quotes: bool) -> String {
         .map(clean_codeblock_headers)
         .map(adjust_links)
         .map(|event| converter.convert(event));
+    let events = math_block::pipe(events);
 
     html::push_html(&mut s, events);
     s
